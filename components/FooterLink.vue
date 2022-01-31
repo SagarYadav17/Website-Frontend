@@ -1,11 +1,6 @@
 <template>
   <div v-if="externalURL">
-    <a
-      class="text-gray-500 hover:text-gray-600 transition"
-      target="_blank"
-      rel="noopener noreferrer"
-      :href="url"
-    >
+    <a class="text-gray-500 hover:text-gray-600 transition" target="_blank" rel="noopener noreferrer" :href="url">
       {{ name }}
     </a>
   </div>

@@ -6,7 +6,7 @@
       <div class="ml-[-0.60rem]">
         <MobileMenu />
         <NavbarItem name="Home" url="/" />
-        <NavbarItem name="Blog" url="/blogs" />
+        <NavbarItem name="Blog" url="/blog" />
       </div>
     </nav>
   </div>
