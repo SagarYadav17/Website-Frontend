@@ -1,67 +1,103 @@
 <template>
-  <div class="bg-gray-900">
-    <Navbar />
-    <main class="flex flex-col justify-center px-8 bg-gray-900">
-      <div class="flex flex-col justify-center items-start max-w-2xl border-gray-700 mx-auto pb-16">
-        <div class="flex flex-col-reverse sm:flex-row items-start">
-          <div class="flex flex-col pr-8">
-            <h1 class="font-bold text-3xl md:text-5xl tracking-tight mb-1 text-white">Sagar Yadav</h1>
-            <h2 class="text-gray-200 mb-4">
-              Backend Developer (Python/Django) at
-              <a href="https://crystaivf.com" target="_blank" class="font-semibold">Crysta IVF</a>
-            </h2>
-            <!-- ?TODO - Add description -->
-            <p class="text-gray-400 mb-16">Helping developers build a faster web. Teaching about web development, serverless, and React / Next.js.</p>
-          </div>
-          <div class="w-[80px] sm:w-[176px] relative mb-8 sm:mb-0 mr-auto">
-            <img alt="Sagar Yadav" height="{176}" width="{176}" src="" class="rounded-full filter grayscale" />
-          </div>
-        </div>
-        <h3 class="font-bold text-2xl md:text-4xl tracking-tight mb-6 text-white">Featured Posts</h3>
-        <div class="flex gap-6 flex-col md:flex-row">
-          <BlogPostCard
-            title="Everything I Know About Style Guides, Design Systems, and Component Libraries"
-            slug="style-guides-component-libraries-design-systems"
+  <div class="bg-gray-900 h-screen">
+    <main class="flex flex-col justify-center px-8">
+      <SideBar />
+      <!-- ?SECTION - Child Pages Starts Here -->
+      <div class="flex flex-col items-start justify-center max-w-2xl mx-auto mt-5 mb-16">
+        <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl text-white">Blog</h1>
+        <p class="mb-4 text-gray-400">
+          {{ description }}
+        </p>
+        <div class="relative w-full mb-4">
+          <input
+            aria-label="Search articles"
+            type="text"
+            placeholder="Search articles"
+            class="block w-full px-4 py-2 border rounded-md border-gray-900 focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-gray-100"
           />
-
-          <BlogPostCard title="Rust Is The Future of JavaScript Infrastructure" slug="rust" />
-          <BlogPostCard title="Past, Present, and Future of React State Management" slug="react-state-management" />
+          <svg
+            class="absolute w-5 h-5 right-3 top-3 text-gray-300"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="{2}" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
-        <NuxtLink to="/blog">
-          <a class="flex mt-8 text-gray-400 leading-7 rounded-lg hover:text-gray-200 transition-all h-6">
-            Read all posts
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 ml-1">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="{2}"
-                d="M17.5 12h-15m11.667-4l3.333 4-3.333-4zm3.333 4l-3.333 4 3.333-4z"
-              />
-            </svg>
-          </a>
-        </NuxtLink>
+
+        <h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight md:text-4xl text-white">All Posts</h3>
+
+        <div v-if="posts">
+          <div v-for="post in posts" v-bind:key="post.id">
+            <NuxtLink :to="post.slug">
+              <a class="w-full">
+                <div class="w-full mb-8">
+                  <div class="flex flex-col justify-between md:flex-row">
+                    <h4 class="w-full mb-2 text-lg font-medium md:text-xl text-gray-100">
+                      {{ post.title }}
+                    </h4>
+                    <p class="w-32 mb-4 text-left text-gray-500 md:text-right md:mb-0">
+                      {{ post.published_date }}
+                    </p>
+                  </div>
+                  <p class="text-gray-400">
+                    {{ post.summary }}
+                  </p>
+                </div>
+              </a>
+            </NuxtLink>
+          </div>
+        </div>
+        <p v-else class="mb-4 text-gray-400">No posts found.</p>
       </div>
-      <Footer />
+      <!-- ?SECTION - Child Pages Ends Here -->
     </main>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-
 export default Vue.extend({
-  name: 'IndexPage',
+  name: 'Blog',
   head() {
     return {
-      title: 'Sagar Yadav | Backend Developer',
+      title: 'Blog | Sagar Yadav',
       meta: [
+        {
+          hid: 'title',
+          name: 'title',
+          content: 'Blog | Sagar Yadav',
+        },
         {
           hid: 'description',
           name: 'description',
-          content: "This is Sagar Yadav's personal website. Here you can find his blog posts and resume.",
+          content: this.$data.description,
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: `${process.env.BASE_URL}`,
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: 'Blog | Sagar Yadav',
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: this.$data.description,
         },
       ],
+    }
+  },
+
+  async asyncData({ $axios }) {
+    const { data } = await $axios.get('/blog/posts')
+    return {
+      posts: data.results,
+      description: `I've been writing online since 2014, mostly about web development and tech careers. In total, I've written ${data.count} articles on my blog. Use the search below to filter by title.`,
     }
   },
 })

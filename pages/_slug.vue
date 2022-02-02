@@ -1,8 +1,8 @@
 <template>
   <div class="bg-gray-900">
-    <Navbar />
     <main class="flex flex-col justify-center px-8 bg-gray-900">
-      <article class="flex flex-col items-start justify-center w-full max-w-2xl mx-auto mb-16">
+      <SideBar />
+      <article class="flex flex-col items-start justify-center w-full max-w-2xl mx-auto mt-5 mb-16">
         <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl text-white">
           {{ title }}
         </h1>
@@ -16,8 +16,6 @@
           {{ content }}
         </div>
       </article>
-
-      <Footer />
     </main>
   </div>
 </template>
@@ -43,7 +41,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           name: 'og:url',
-          content: `${process.env.BASE_URL}/blog/${this.$route.params.slug}`,
+          content: `${process.env.BASE_URL}/${this.$route.params.slug}`,
         },
         {
           hid: 'og:title',
