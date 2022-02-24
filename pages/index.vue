@@ -1,19 +1,18 @@
 <template>
   <div class="bg-gray-900 h-screen">
     <main class="flex flex-col justify-center px-8">
-      <SideBar />
       <!-- ?SECTION - Child Pages Starts Here -->
       <div class="flex flex-col items-start justify-center max-w-2xl mx-auto mt-5 mb-16">
         <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl text-white">Blog</h1>
-        <p class="mb-4 text-gray-400">
+        <p class="my-4 text-gray-400">
           {{ description }}
         </p>
-        <div class="relative w-full mb-4">
+        <div class="relative w-full">
           <input
             aria-label="Search articles"
             type="text"
             placeholder="Search articles"
-            class="block w-full px-4 py-2 border rounded-md border-gray-900 focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-gray-100"
+            class="block w-full px-4 py-2 border rounded-md border-gray-900 focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-gray-100" @change="console.log()"
           />
           <svg
             class="absolute w-5 h-5 right-3 top-3 text-gray-300"
@@ -58,6 +57,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
+
 export default Vue.extend({
   name: 'Blog',
   head() {
@@ -97,8 +98,16 @@ export default Vue.extend({
     const { data } = await $axios.get('/blog/posts')
     return {
       posts: data.results,
-      description: `I've been writing online since 2014, mostly about web development and tech careers. In total, I've written ${data.count} articles on my blog. Use the search below to filter by title.`,
+      description: `Well, Hello There. Thanks for checking my blog. In total, I've written ${data.count} articles on my blog. Use the search below to filter by title.`,
     }
+  },
+
+  methods: {
+    searchPosts(query: string) {
+      this.$axios.get('/blog/posts?q=' + query).then((response) => {
+        return { posts: response.data.results }
+      })
+    },
   },
 })
 </script>

@@ -1,7 +1,6 @@
 <template>
   <div class="bg-gray-900">
     <main class="flex flex-col justify-center px-8 bg-gray-900">
-      <SideBar />
       <article class="flex flex-col items-start justify-center w-full max-w-2xl mx-auto mt-5 mb-16">
         <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl text-white">
           {{ title }}
